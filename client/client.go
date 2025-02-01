@@ -54,9 +54,9 @@ func (c BlockClient) Call(ctx context.Context, req *remote.Request) (*remote.Res
 	if err := c.pipeline.Process(buffer); err != nil {
 		return nil, err
 	}
-	if err := c.transport.Send(buffer.ReadAll()); err != nil {
-		return nil, err
-	}
+	// if err := c.transport.Send(buffer.ReadAll()); err != nil {
+	// 	return nil, err
+	// }
 	return nil, nil
 }
 
