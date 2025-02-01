@@ -21,6 +21,16 @@ func (b *ByteBuffer) Read(n int) ([]byte, error) {
 	return data, err
 }
 
+func (b *ByteBuffer) Reset() {
+	b.buf.Reset()
+}
+
 func (b *ByteBuffer) Len() int {
 	return b.buf.Len()
+}
+
+func (b *ByteBuffer) ReadAll() []byte {
+	data := b.buf.Bytes()
+	b.buf.Reset()
+	return data
 }
