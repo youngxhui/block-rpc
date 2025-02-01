@@ -16,9 +16,9 @@ func TestRouter_Register(t *testing.T) {
 		}
 		router.Register(ts, handler)
 
-		if _, has := router.GetHandler("testing", "t"); has {
-			t.Log("Success")
-		}
+		// if _, has := router.GetHandler("testing", "t"); has {
+		// 	t.Log("Success")
+		// }
 	})
 }
 
