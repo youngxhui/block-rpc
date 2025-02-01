@@ -15,10 +15,14 @@ func TestRouter_Register(t *testing.T) {
 			return &remote.Response{}, nil
 		}
 		router.Register(ts, handler)
-
-		// if _, has := router.GetHandler("testing", "t"); has {
-		// 	t.Log("Success")
-		// }
+		h, has := router.GetHandler("testing", "t")
+		if !has {
+			t.Errorf("Not Found %v ", has)
+		}
+		_, err := h(new(remote.Request))
+		if err != nil {
+			t.Errorf("handler execute error:%v", err)
+		}
 	})
 }
 
@@ -26,4 +30,14 @@ type demoService struct{}
 
 func (t demoService) Name() string {
 	return "testing"
+}
+
+func TestRouter_GetHandler(t *testing.T) {
+	t.Run("NotFoundHandler", func(t *testing.T) {
+		router := NewRouter()
+		_, has := router.GetHandler("demo", "t")
+		if !has {
+			t.Errorf("Not Found Handler error, has: %v", has)
+		}
+	})
 }

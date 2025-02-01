@@ -15,5 +15,5 @@ func (c *JSONCodec) Decode(data []byte, v any) error {
 	if len(data) == 0 {
 		return errors.New("empty data")
 	}
-	return json.Unmarshal(data, v)
+	return json.Unmarshal(data, &v)
 }

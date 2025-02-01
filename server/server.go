@@ -10,6 +10,11 @@ type Service interface {
 	Name() string
 }
 
+// notFoundHandler 404使用
+var notFoundHandler Handler = func(req *remote.Request) (*remote.Response, error) {
+	return &remote.Response{}, nil
+}
+
 type Handler func(req *remote.Request) (*remote.Response, error)
 
 type Router struct {
@@ -23,6 +28,7 @@ func NewRouter() *Router {
 	}
 }
 
+// Register 注册路由
 func (r *Router) Register(service Service, handlers map[string]Handler) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -39,11 +45,11 @@ func (r *Router) Register(service Service, handlers map[string]Handler) {
 
 func (r *Router) GetHandler(serviceName, methodName string) (Handler, bool) {
 	r.mu.Lock()
-	defer r.mu.RLock()
+	defer r.mu.Unlock()
 	service, ok := r.services[serviceName]
 	if !ok {
 		// TODO 默认需要一个 NotFoundHandler
-		return nil, false
+		return notFoundHandler, true
 	}
 	handler, ok := service[methodName]
 	return handler, ok

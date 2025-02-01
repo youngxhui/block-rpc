@@ -42,3 +42,33 @@ func TestJSONCodec_Encode(t *testing.T) {
 		})
 	}
 }
+
+func TestJSONCodec_Decode(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		a       string
+		data    []byte
+		wantErr bool
+	}{
+		{name: "not error", data: []byte{'{', '"', 'a', '"', ':', '"', 'a', '"', '}'}, a: "a", wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var c codec.JSONCodec
+			d := demo{
+				A: tt.a,
+			}
+			gotErr := c.Decode(tt.data, &d)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("Decode() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("Decode() succeeded unexpectedly")
+			}
+		})
+	}
+}
