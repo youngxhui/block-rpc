@@ -31,6 +31,6 @@ func (b *ByteBuffer) Len() int {
 
 func (b *ByteBuffer) ReadAll() []byte {
 	data := b.buf.Bytes()
-	b.buf.Reset()
+	b.Reset()
 	return data
 }

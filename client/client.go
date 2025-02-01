@@ -54,10 +54,31 @@ func (c BlockClient) Call(ctx context.Context, req *remote.Request) (*remote.Res
 	if err := c.pipeline.Process(buffer); err != nil {
 		return nil, err
 	}
-	// if err := c.transport.Send(buffer.ReadAll()); err != nil {
-	// 	return nil, err
-	// }
-	return nil, nil
+	buf := buffer.ReadAll()
+	msg := protocol.Message{}
+	msg.Decode(buf)
+
+	if err := c.transport.Send(&msg); err != nil {
+		return nil, err
+	}
+	respData, err := c.transport.Receive()
+	if err != nil {
+		return nil, err
+	}
+	buffer.Reset()
+	buf, err = respData.Encode()
+	if err != nil {
+		return nil, err
+	}
+	buffer.Write(buf)
+	if err := c.pipeline.Process(buffer); err != nil {
+		return nil, err
+	}
+	var resp remote.Response
+	if err := c.config.Codec.Decode(buffer.ReadAll(), &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
 
 func (c BlockClient) Close() error {

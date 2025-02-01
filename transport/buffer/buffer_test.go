@@ -29,3 +29,36 @@ func TestByteBuffer_Len(t *testing.T) {
 		})
 	}
 }
+
+func TestByteBuffer_Read(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		n       int
+		data    []byte
+		want    []byte
+		wantErr bool
+	}{
+		{name: "read empty", n: 0, data: []byte("hello"), want: []byte{}, wantErr: false},
+		{name: "read 1 size", n: 1, data: []byte("hello"), want: []byte("h"), wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := buffer.NewByteBuffer()
+			b.Write(tt.data)
+			got, gotErr := b.Read(tt.n)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("Read() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("Read() succeeded unexpectedly")
+			}
+			if len(got) != len(tt.want) {
+				t.Errorf("Read() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
