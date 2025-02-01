@@ -24,14 +24,11 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
-    - name: Test with Coverage
-      run: |
-        go test -v -covermode=atomic -coverprofile=coverage.out ./...
-        
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v4
+    - name: Run tests
+      run: go test -coverprofile=coverage.txt
+
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v5
       with:
-        file: coverage.out
-        flags: unittests
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: youngxhui/block-rpc
