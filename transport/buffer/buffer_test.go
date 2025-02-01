@@ -12,18 +12,18 @@ func TestByteBuffer_Len(t *testing.T) {
 		data []byte
 		want int
 	}{
+		{name: "buffer is empty", data: []byte{}, want: int(0)},
 		{name: "size 1", data: []byte{'1'}, want: 1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			b := buffer.NewByteBuffer()
-			i, err := b.Write(tt.data)
+			_, err := b.Write(tt.data)
 			if err != nil {
 				t.Errorf("Write Buffer Error %v", err)
 			}
-			t.Logf("Buffer Write Len %d", i)
 			got := b.Len()
-			if true {
+			if got != tt.want {
 				t.Errorf("Len() = %v, want %v", got, tt.want)
 			}
 		})
