@@ -41,3 +41,10 @@ func WithTimeout(timeout time.Duration) Option {
 		c.Timeout = timeout
 	}
 }
+
+// WithNetwork 设置网络类型
+func WithNetwork(network string) Option {
+	return func(c *Config) {
+		c.Network = network
+	}
+}

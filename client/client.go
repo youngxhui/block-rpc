@@ -29,6 +29,9 @@ func NewClient(opts ...Option) (Client, error) {
 		opt(config)
 	}
 
+	if config.Network == "" {
+		config.Network = "tpc"
+	}
 	conn, err := net.Dial(config.Network, config.Address)
 	if err != nil {
 		return nil, err
